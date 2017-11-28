@@ -112,6 +112,7 @@ public class MyLinkedList<T> {
 
     public void deleteAll(){
         head = null;
+        length = 0;
     }
     public boolean isEmpty(){
         return this.head == null;
