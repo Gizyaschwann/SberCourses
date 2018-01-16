@@ -62,13 +62,21 @@ public class MyLinkedList<T> {
         return getLastNode().value;
     }
 
-    private Node getLastNode(){
+    private Node getLastNode()throws NoSuchElementException{
 
         Node node = head;
-        while (node.next != null){
-            node = node.next;
+        try {
+            if (head == null)
+                throw new NoSuchElementException();
+            while (node.next != null){
+                node = node.next;
+            }
+            return node;
+
+        } catch (NoSuchElementException e){
+            System.out.println("You can't get last element. It doesn't exist.");
+            return null;
         }
-        return node;
     }
 
     public void deleteFirst() throws NoSuchElementException{
