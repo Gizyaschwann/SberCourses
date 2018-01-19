@@ -1,18 +1,15 @@
 package HW1;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
-import static java.lang.Thread.sleep;
 
 /**
  * Created by Ilyuza on 1/18/2018.
  */
 public class Handler {
 
-    File files;
-    Parser parser;
+    private File files;
+    private Parser parser;
 
     Handler(){
         files = new File("src/HW1/resources");
@@ -22,13 +19,8 @@ public class Handler {
 
     public void start(){
 
-//        for(File item : files.listFiles()){
-//            System.out.println(item.getName());
-//        }
-
         for(File item : files.listFiles()){
             Thread thread = new Thread(() -> {
-//                    System.out.println("Thread " + Thread.currentThread().getName());
                     handleFile(item);
 
             });
@@ -36,7 +28,7 @@ public class Handler {
         }
 
     }
-    private synchronized void handleFile(File item) {
+    private void handleFile(File item) {
         String line = "";
         try {
             FileReader fileReader =
@@ -44,7 +36,7 @@ public class Handler {
             BufferedReader bufferedReader =
                     new BufferedReader(fileReader);
             while((line = bufferedReader.readLine()) != null) {
-//                System.out.println(line);
+
                 parser.parse(line);
             }
             bufferedReader.close();
@@ -55,12 +47,7 @@ public class Handler {
             e.printStackTrace();
         } catch (IllegalArgumentException e){
             System.out.println("There's an illegal argument in string");
-            // Stop all threads and terminate wwwwwwwwwww
         }
-    }
-
-    public void printFinalMap(){
-        parser.printMap();
     }
 
 }
