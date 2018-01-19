@@ -1,7 +1,7 @@
 package HW1;
 
 import java.io.*;
-import java.util.HashMap;
+import static java.lang.Thread.sleep;
 
 
 /**
@@ -12,5 +12,12 @@ public class Main {
 
         Handler handler = new Handler();
         handler.start();
+        try {
+            sleep(1000);
+        } catch (InterruptedException e){}
+
+        handler.printFinalMap();
     }
+
+
 }
