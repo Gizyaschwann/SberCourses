@@ -2,10 +2,10 @@ package HW1;
 
 import java.io.*;
 
-
 /**
- * Created by Ilyuza on 1/18/2018.
+ * Class responsible for files processing & threads launch
  */
+
 public class Handler {
 
     private File files;
@@ -19,13 +19,18 @@ public class Handler {
 
     public void start(){
 
-        for(File item : files.listFiles()){
-            Thread thread = new Thread(() -> {
+        try {
+            for(File item : files.listFiles()){
+                Thread thread = new Thread(() -> {
                     handleFile(item);
 
-            });
-            thread.start();
+                });
+                thread.start();
+            }
+        } catch (NullPointerException e){
+            System.out.println("Incorrect path to directory with files, please check it one more time.");
         }
+
 
     }
     private void handleFile(File item) {
@@ -45,8 +50,6 @@ public class Handler {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (IllegalArgumentException e){
-            System.out.println("There's an illegal argument in string");
         }
     }
 

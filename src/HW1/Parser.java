@@ -1,6 +1,5 @@
 package HW1;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -9,17 +8,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Ilyuza on 1/18/2018.
+ * Class responsible for words processing
  */
+
 public class Parser {
 
-    Map<String, AtomicInteger> hashMap;
-    Pattern regexp; // допустимые символы - кириллица, цифры, знаки препинания
+    Map<String, AtomicInteger> hashMap; // common data structure for storing words and their occurences
+    Pattern regexp; // regular expression to process words
 //    ReentrantLock lock;
 
     Parser(){
         hashMap = new ConcurrentHashMap<>();
-        regexp = Pattern.compile("[а-яА-ЯёЁ0-9.,()!?:;-]+$");
+        regexp = Pattern.compile("[а-яА-ЯёЁ0-9.,()!?:;-]+$"); // allowed symbols - cyrillic, numbers, punctuation marks
 //        lock = new ReentrantLock();
     }
 
@@ -32,7 +32,7 @@ public class Parser {
             for (String item : parts) {
                 Matcher m = regexp.matcher(item);
                 if (!m.matches()) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException(item);
                 } else {
                     item = item.replaceAll("[0-9.,()!?:;-]|\\n|\\s|\\t|\\r", "").toLowerCase();
 
@@ -60,15 +60,13 @@ public class Parser {
 
         }
         catch (IllegalArgumentException e){
-            System.out.println("There's an illegal argument in string");
-
+            if (!e.getMessage().equals("")){ // avoid blanks in case they are not delimeters
+                System.out.println("There's following illegal word in text: " + e.getMessage());
+            }
         }
 
     }
 
-    /**
-     * Method for map printing after all operations are done
-     */
 //    public void printMap(){
 //
 //        System.out.println("START PRINTING -------");
