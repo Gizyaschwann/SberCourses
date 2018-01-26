@@ -1,7 +1,6 @@
 package HW1;
 
 import java.io.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 
@@ -13,12 +12,12 @@ public class Handler {
 
     private File files;
     private Parser parser;
-    private AtomicBoolean atomicBoolean;
+    private volatile boolean flag;
 
     Handler(){
         files = new File("src/HW1/resources");
         parser = new Parser();
-        atomicBoolean = new AtomicBoolean(true);
+        flag = false;
     }
 
 
@@ -28,7 +27,7 @@ public class Handler {
 
             for(File item : files.listFiles()){
                 Thread thread = new Thread(() -> {
-                    while (atomicBoolean.get() != false) {
+                    while (!flag) {
                         handleFile(item);
                     }
 
@@ -43,7 +42,7 @@ public class Handler {
     }
 
     public void stopThreads(){
-        atomicBoolean.set(false);
+        flag = true;
     }
 
     private void handleFile(File item) {
