@@ -1,6 +1,9 @@
 package HW1;
 
 import java.io.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.lang.Thread.sleep;
 
 /**
  * Class responsible for files processing & threads launch
@@ -10,19 +13,24 @@ public class Handler {
 
     private File files;
     private Parser parser;
+    private AtomicBoolean atomicBoolean;
 
     Handler(){
         files = new File("src/HW1/resources");
         parser = new Parser();
+        atomicBoolean = new AtomicBoolean(true);
     }
 
 
     public void start(){
 
         try {
+
             for(File item : files.listFiles()){
                 Thread thread = new Thread(() -> {
-                    handleFile(item);
+                    while (atomicBoolean.get() != false) {
+                        handleFile(item);
+                    }
 
                 });
                 thread.start();
@@ -33,6 +41,11 @@ public class Handler {
 
 
     }
+
+    public void stopThreads(){
+        atomicBoolean.set(false);
+    }
+
     private void handleFile(File item) {
         String line = "";
         try {
@@ -50,6 +63,16 @@ public class Handler {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (IllegalArgumentException e){
+            stopThreads();
+            try {
+                sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            System.out.println("----------------------------------------------------------\n" +
+                    "I've stopped all threads, because I found illegal symbol" +
+                    "\n----------------------------------------------------------");
         }
     }
 
