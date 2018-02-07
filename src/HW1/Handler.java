@@ -9,7 +9,7 @@ import static java.lang.Thread.sleep;
  * Class responsible for files processing & threads launch
  */
 
-public class Handler {
+public class Handler implements IHandle{
 
     private File files;
     private Parser parser;
@@ -21,7 +21,7 @@ public class Handler {
         atomicBoolean = new AtomicBoolean(true);
     }
 
-
+    @Override
     public void start(){
 
         try {
@@ -42,11 +42,8 @@ public class Handler {
 
     }
 
-    public void stopThreads(){
-        atomicBoolean.set(false);
-    }
-
-    private void handleFile(File item) {
+    @Override
+    public void handleFile(File item) {
         String line = "";
         try {
             FileReader fileReader =
@@ -74,6 +71,11 @@ public class Handler {
                     "I've stopped all threads, because I found illegal symbol" +
                     "\n----------------------------------------------------------");
         }
+    }
+
+    @Override
+    public void stopThreads(){
+        atomicBoolean.set(false);
     }
 
 }

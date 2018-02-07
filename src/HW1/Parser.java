@@ -10,17 +10,15 @@ import java.util.regex.Pattern;
  * Class responsible for words processing
  */
 
-public class Parser {
+public class Parser implements IParse {
 
     Map<String, AtomicInteger> hashMap; // common data structure for storing words and their occurences
-    Pattern regexp; // regular expression to process words
-
     Parser(){
         hashMap = new ConcurrentHashMap<>();
-        regexp = Pattern.compile("[а-яА-ЯёЁ0-9.,()!?:;-]+$"); // allowed symbols - cyrillic, numbers, punctuation marks
     }
 
 
+    @Override
     public void parse(String line) throws IllegalArgumentException{
 
         String[] parts = line.split("\\s");
