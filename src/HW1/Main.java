@@ -1,14 +1,15 @@
 package HW1;
 
+import java.lang.reflect.Proxy;
 
-/**
- * Created by Ilyuza on 1/16/2018.
- */
 public class Main {
     public static void main(String[] args){
 
         Handler handler = new Handler();
-        handler.start();
+        IHandle handleProxy = (IHandle) Proxy.newProxyInstance(Handler.class.getClassLoader(), Handler.class.getInterfaces(),
+                new MyInvocationHandler(handler));
+        handleProxy.start();
+
     }
 
 }

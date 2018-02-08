@@ -1,6 +1,7 @@
 package HW1;
 
 import java.io.*;
+import java.lang.reflect.Proxy;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
@@ -14,11 +15,14 @@ public class Handler implements IHandle{
     private File files;
     private Parser parser;
     private AtomicBoolean atomicBoolean;
+    private IParse parserProxy;
 
     Handler(){
         files = new File("src/HW1/resources");
         parser = new Parser();
         atomicBoolean = new AtomicBoolean(true);
+        parserProxy = (IParse) Proxy.newProxyInstance(Parser.class.getClassLoader(), Parser.class.getInterfaces(),
+                new MyInvocationHandler(parser));
     }
 
     @Override
@@ -51,8 +55,7 @@ public class Handler implements IHandle{
             BufferedReader bufferedReader =
                     new BufferedReader(fileReader);
             while((line = bufferedReader.readLine()) != null) {
-
-                parser.parse(line);
+                parserProxy.parse(line);
             }
             bufferedReader.close();
 
