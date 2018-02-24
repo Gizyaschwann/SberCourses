@@ -1,8 +1,7 @@
 package HW1;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,11 +11,11 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    Map<String, AtomicInteger> hashMap; // common data structure for storing words and their occurences
+    Map<String, Integer> hashMap; // common data structure for storing words and their occurences
     Pattern regexp; // regular expression to process words
 
     Parser(){
-        hashMap = new ConcurrentHashMap<>();
+        hashMap = new HashMap<>();
         regexp = Pattern.compile("[а-яА-ЯёЁ0-9.,()!?:;-]+$"); // allowed symbols - cyrillic, numbers, punctuation marks
     }
 
@@ -35,13 +34,14 @@ public class Parser {
                         synchronized (hashMap) {
 
                             if (hashMap.containsKey(item)) {
-                                AtomicInteger temp = hashMap.get(item);
-                                temp.addAndGet(1);
+
+                                int temp = hashMap.get(item);
+                                temp++;
                                 hashMap.put(item, temp);
                                 System.out.println("Word: " + item + " | кол-во вхождений: "
                                         + temp);
                             } else {
-                                hashMap.putIfAbsent(item, new AtomicInteger(1));
+                                hashMap.put(item, 1);
                                 System.out.println("Word: " + item + " | кол-во вхождений: 1");
                             }
                         }
