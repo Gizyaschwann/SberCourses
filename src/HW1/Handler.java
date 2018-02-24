@@ -9,11 +9,12 @@ import static java.lang.Thread.sleep;
  * Class responsible for files processing & threads launch
  */
 
-public class Handler {
+public class Handler implements IHandle {
 
     private File files;
     private Parser parser;
     private AtomicBoolean atomicBoolean;
+
 
     Handler(){
         files = new File("src/HW1/resources");
@@ -21,14 +22,14 @@ public class Handler {
         atomicBoolean = new AtomicBoolean(true);
     }
 
-
+    @Override
     public void start(){
 
         try {
 
             for(File item : files.listFiles()){
                 Thread thread = new Thread(() -> {
-                    while (atomicBoolean.get() != false) {
+                    if (atomicBoolean.get() != false) {
                         handleFile(item);
                     }
 
@@ -42,11 +43,13 @@ public class Handler {
 
     }
 
-    public void stopThreads(){
+    @Override
+    public void stopThreads() {
         atomicBoolean.set(false);
     }
 
-    private void handleFile(File item) {
+    @Override
+    public void handleFile(File item) {
         String line = "";
         try {
             FileReader fileReader =
